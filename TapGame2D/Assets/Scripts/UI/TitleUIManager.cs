@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -30,6 +30,7 @@ public class TitleUIManager : MonoBehaviour
         {
             startButton.onClick.AddListener(OnStartButtonClicked);
         }
+
         if (resetScoreButton != null)
         {
             resetScoreButton.onClick.AddListener(OnResetScoreButtonClicked);

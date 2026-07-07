@@ -57,7 +57,7 @@ public class FadeManager : MonoBehaviour
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1080, 1980);
 
-        // レイキャスターの設定（フェード中に背面ボタンをタップできなくするため）
+        // レイキャスターの設定
         canvasObject.AddComponent<GraphicRaycaster>();
 
         // 全画面黒画像の生成

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -151,7 +151,6 @@ public class SpawnedObject : MonoBehaviour
         }
         Destroy(gameObject);
     }
-
 
     /// <summary>
     /// クリスタルオブジェクトがタップされた時の処理

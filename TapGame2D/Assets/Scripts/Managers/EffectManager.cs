@@ -87,7 +87,7 @@ public class EffectManager : MonoBehaviour
             rectTrans.anchoredPosition = position;
         }
 
-        // エフェクトの色の適用（もしパーティクルまたはイメージの色を変更可能な場合）
+        // エフェクトの色の適用
         ParticleSystem particle = effectObj.GetComponent<ParticleSystem>();
 
         if (particle != null)
