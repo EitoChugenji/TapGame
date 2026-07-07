@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -65,11 +65,19 @@ public class SceneSetupHelper : EditorWindow
     private static GameObject CreateFloatingTextPrefab()
     {
         GameObject textObj = new GameObject("FloatingText", typeof(RectTransform));
+
+        // テキストが切れないよう十分なサイズを確保する
+        RectTransform rt = textObj.GetComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(300f, 100f);
+
         Text text = textObj.AddComponent<Text>();
         text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         text.fontSize = 65;
         text.alignment = TextAnchor.MiddleCenter;
         text.fontStyle = FontStyle.Bold;
+        // "+100" / "+300" が切れないようオーバーフローを許可する
+        text.horizontalOverflow = HorizontalWrapMode.Overflow;
+        text.verticalOverflow = VerticalWrapMode.Overflow;
 
         // 文字の視認性を高めるためのシャドウ効果を追加
         Shadow shadow = textObj.AddComponent<Shadow>();

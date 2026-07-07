@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// スコア、コンボ、およびハイスコアのデータを管理するクラス
@@ -39,7 +39,8 @@ public class ScoreManager : MonoBehaviour
     /// オブジェクトがタップされた際にスコアを加算し、コンボ数を増加させる
     /// </summary>
     /// <param name="baseAmount">オブジェクトの基本得点</param>
-    public void AddScore(int baseAmount)
+    /// <returns>実際に加算されたスコア値（ポップアップ表示の同期に使用）</returns>
+    public int AddScore(int baseAmount)
     {
         // 減点アイテム（爆弾など）の処理
         if (baseAmount < 0)
@@ -54,17 +55,15 @@ public class ScoreManager : MonoBehaviour
             
             // 減点時はコンボをリセットする
             ResetCombo();
-            return;
+            return baseAmount;
         }
 
         // 通常・レアの加算処理
         ComboCount++;
         
-        // コンボボーナス（コンボ数に応じて追加点、最大+50）
-        int comboBonus = Mathf.Min(ComboCount, 50);
-        int finalScore = baseAmount + comboBonus;
-        
-        CurrentScore += finalScore;
+        // スコアの加算 (コンボボーナスは加算しない)
+        CurrentScore += baseAmount;
+        return baseAmount;
     }
 
     /// <summary>

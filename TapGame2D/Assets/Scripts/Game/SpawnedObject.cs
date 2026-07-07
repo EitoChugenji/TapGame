@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -180,7 +180,7 @@ public class SpawnedObject : MonoBehaviour
             // タップ波紋エフェクト
             EffectManager.Instance.SpawnTapEffect(tapPos, themeColor);
 
-            // ポップアップ数値テキスト
+            // ポップアップ数値テキスト（scoreValueはAddScore()への引数と同値のため常に一致）
             string popupText = scoreValue >= 0 ? "+" + scoreValue.ToString() : scoreValue.ToString();
             EffectManager.Instance.SpawnFloatingText(tapPos, popupText, themeColor);
         }
