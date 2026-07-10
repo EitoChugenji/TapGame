@@ -55,7 +55,8 @@ public class FadeManager : MonoBehaviour
         // UIスケール設定
         CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1080, 1980);
+        scaler.referenceResolution = new Vector2(1080, 1920);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
         // レイキャスターの設定
         canvasObject.AddComponent<GraphicRaycaster>();
