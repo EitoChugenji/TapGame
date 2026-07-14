@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// ゲーム全体のBGMおよびSE（効果音）の再生を管理するシングルトンクラス
@@ -23,6 +23,9 @@ public class SoundManager : MonoBehaviour
     private AudioClip gameOverSoundClip;
     private AudioClip gameStartSoundClip;
     private AudioClip bgmSoundClip;
+
+    private AudioSource[] sePool;
+    private int currentSeIndex = 0;
 
     private void Awake()
     {
@@ -63,7 +66,24 @@ public class SoundManager : MonoBehaviour
         // BGMはループ再生を有効にする
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
+        bgmSource.volume = 0.5f;
         seSource.playOnAwake = false;
+        seSource.volume = 0.5f;
+
+        InitializeSePool();
+    }
+
+    private void InitializeSePool()
+    {
+        const int PoolSize = 6;
+        sePool = new AudioSource[PoolSize];
+        sePool[0] = seSource;
+        for (int i = 1; i < PoolSize; i++)
+        {
+            sePool[i] = gameObject.AddComponent<AudioSource>();
+            sePool[i].playOnAwake = false;
+            sePool[i].volume = 0.5f;
+        }
     }
 
     /// <summary>
@@ -71,8 +91,8 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     private void GenerateProceduralSounds()
     {
-        tapSoundClip = CreateToneClip(523.25f, 0.1f);        // C5 (ド) - 通常タップ音
-        rareTapSoundClip = CreateToneClip(1046.50f, 0.15f);  // C6 (高いド) - レアタップ音
+        tapSoundClip = CreateToneClip(523.25f, 0.15f);        // C5 (ド) - 通常タップ音
+        rareTapSoundClip = CreateToneClip(1046.50f, 0.2f);  // C6 (高いド) - レアタップ音
         bombSoundClip = CreateToneClip(150.0f, 0.25f);       // 低音ノイズ風 - 爆弾タップ音
         gameOverSoundClip = CreateToneClip(220.0f, 0.8f);    // A3 (ラ) - ゲーム終了音
         gameStartSoundClip = CreateToneClip(880.0f, 0.4f);   // A5 - ゲーム開始音
@@ -169,9 +189,37 @@ public class SoundManager : MonoBehaviour
                 break;
         }
 
-        if (clip != null && seSource != null)
+        if (clip != null)
         {
-            seSource.PlayOneShot(clip);
+            if (sePool != null && sePool.Length > 0)
+            {
+                AudioSource sourceToUse = null;
+                for (int i = 0; i < sePool.Length; i++)
+                {
+                    int index = (currentSeIndex + i) % sePool.Length;
+                    if (sePool[index] != null && !sePool[index].isPlaying)
+                    {
+                        sourceToUse = sePool[index];
+                        currentSeIndex = (index + 1) % sePool.Length;
+                        break;
+                    }
+                }
+
+                if (sourceToUse == null)
+                {
+                    sourceToUse = sePool[currentSeIndex];
+                    currentSeIndex = (currentSeIndex + 1) % sePool.Length;
+                }
+
+                if (sourceToUse != null)
+                {
+                    sourceToUse.PlayOneShot(clip);
+                }
+            }
+            else if (seSource != null)
+            {
+                seSource.PlayOneShot(clip);
+            }
         }
     }
 
