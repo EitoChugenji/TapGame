@@ -347,7 +347,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6700\u9AD8\u30B9\u30B3\u30A2\uFF1A0"
+  m_Text: "HIGH SCORE\uFF1A0"
 --- !u!222 &763451856
 CanvasRenderer:
   m_ObjectHideFlags: 0

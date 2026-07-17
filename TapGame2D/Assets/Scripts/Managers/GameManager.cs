@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -113,7 +113,11 @@ public class GameManager : MonoBehaviour
         if (spawnTimer >= SpawnInterval)
         {
             spawnTimer = 0.0f;
-            SpawnRandomPopupObject();
+            int spawnCount = Random.Range(2, 4);
+            for (int i = 0; i < spawnCount; i++)
+            {
+                SpawnRandomPopupObject();
+            }
         }
 
         // 4. タップ入力検知（重なったオブジェクトも同時に処理するため、グローバルに検知）
@@ -189,8 +193,31 @@ public class GameManager : MonoBehaviour
 
         // 画面のセーフエリア内に収まるように座標を決定 (Canvas 1080x1920 想定)
         // 左右マージン、上下のUI（HUDや一時停止ボタン）への被りを考慮
-        float randomX = Random.Range(-450f, 450f);
-        float randomY = Random.Range(-750f, 650f);
+        float randomX = 0f;
+        float randomY = 0f;
+        SpawnedObject[] activeObjects = FindObjectsOfType<SpawnedObject>();
+        for (int attempt = 0; attempt < 15; attempt++)
+        {
+            randomX = Random.Range(-450f, 450f);
+            randomY = Random.Range(-750f, 650f);
+            bool overlaps = false;
+            foreach (var activeObj in activeObjects)
+            {
+                if (activeObj != null)
+                {
+                    RectTransform activeRect = activeObj.GetComponent<RectTransform>();
+                    if (activeRect != null && Vector2.Distance(new Vector2(randomX, randomY), activeRect.anchoredPosition) < 130f)
+                    {
+                        overlaps = true;
+                        break;
+                    }
+                }
+            }
+            if (!overlaps)
+            {
+                break;
+            }
+        }
 
         GameObject prefab = objectPrefabs[prefabIndex];
         GameObject spawnedObj = Instantiate(prefab, spawnContainer);
